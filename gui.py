@@ -1,7 +1,7 @@
 import functions as fn
 import FreeSimpleGUI as sg
 
-
+# Define needed elements
 label1 = sg.Text("Type in a Website")
 label2 = sg.Text("Enter desired Number of upper case characters")
 label3 = sg.Text("Enter desired number of lower case characters")
@@ -26,18 +26,19 @@ window = sg.Window('My Password Manager', layout=[[[label1],[website_box]],
                                                   [[label4],[numbers_box]],
                                                   [[label5],[special_box]],
                                                   [submit_button]],
-                   font=('Times New Roman', 20))
+                   font=('Times New Roman', 15))
 while True:
     event, values = window.read()
-    print(event)
-
     match event:
         case 'Generate':
+            website = values['website']
+
             values = fn.convert_to_int(values)
             my_list = fn.convert_to_list(values)
             password_generated = fn.create_new_password(*my_list)
             password = fn.shuffle_str(password_generated)
-            print(f"the final result is {"".join(password)}")
+            password = "".join(password)
+            fn.write_to_file(website,password)
 
 
 
