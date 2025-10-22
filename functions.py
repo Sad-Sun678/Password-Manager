@@ -32,35 +32,21 @@ def view_file(filename = "passwords.txt"):
         content = file.readlines()
     return content
 
-def print_box_from_file(file_path, title=None):
-    # Read all non-empty lines and strip whitespace
-    with open(file_path, 'r') as file:
-        items = [line.strip() for line in file if line.strip()]
+def convert_to_int(dictionary):
+    for key, value in dictionary.items():
+        if key == "website":
+            pass
+        else:
+            converted_value = int(value)
+            dictionary[key] = converted_value
+    return dictionary
 
-    if not items:
-        print("No items found in file.")
-        return
+def convert_to_list(dictionary):
+    list = []
+    for k, v in dictionary.items():
+        if k == 'website':
+            pass
+        else:
+            list.append(dictionary[k])
+    return list
 
-    # Find the longest line
-    max_len = max(len(line) for line in items)
-
-    # Add some horizontal padding inside the box
-    padding = 4
-    box_width = max_len + padding
-
-    # Build the title line if provided
-    if title:
-        title_line = f" {title} "
-        title_padding = (box_width - len(title_line)) // 2
-        print(" " * title_padding + title_line)
-
-    # Top border
-    print("+" + "-" * box_width + "+")
-
-    # Center each line
-    for line in items:
-        line_padding = (box_width - len(line)) // 2
-        print("|" + " " * line_padding + line + " " * (box_width - len(line) - line_padding) + "|")
-
-    # Bottom border
-    print("+" + "-" * box_width + "+")
