@@ -9,7 +9,7 @@ def shuffle_str(list):
 
 
 
-def create_new_password(upper_case, lower_case, special_char,numbers):
+def create_new_password(upper_case, lower_case, numbers,special_char):
     password = []
     for _ in range(upper_case):
         password.append(random.choice(string.ascii_uppercase))
@@ -50,3 +50,10 @@ def convert_to_list(dictionary):
             list.append(dictionary[k])
     return list
 
+def format_password_list(lines):
+    formatted = ""
+    for line in lines:
+        stripped = line.strip()
+        if stripped:
+            formatted += stripped + "\n"
+    return formatted

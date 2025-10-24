@@ -28,6 +28,8 @@ while True:
         print(f"Your new password for {website} is: {password}")
 
     elif user_selection in ("2", "view"):
-        fn.print_box_from_file('passwords.txt', "Saved Passwords")
+        passwords_file = fn.view_file()
+
+        print(passwords_file)
     else:
         print("Invalid choice.\n")
