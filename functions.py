@@ -1,11 +1,11 @@
 # functions.py
 import random, string
 from pathlib import Path
-def shuffle_str(list):
-    shuffled_password = []
-    for i in list:
-        shuffled_password.append(random.choice(list))
-    return shuffled_password
+
+def shuffle_str(elements):
+    working_list = elements
+    random.shuffle(working_list)
+    return working_list
 
 
 
@@ -25,12 +25,27 @@ def create_new_password(upper_case, lower_case, numbers,special_char):
 def write_to_file(website, password):
     out_path = Path(__file__).parent / "passwords.txt"
     with open(out_path, "a", encoding="utf-8") as file:
-        file.write(f"{website}:{password}\n")
+        file.write(f"{website}: {password}\n")
+def delete_saved_password(line_in_file):
+    content = view_file()
+    out_path = Path(__file__).parent / "passwords.txt"
+    if line_in_file in content:
+        content.remove(line_in_file)
+        with open ("passwords.txt",'w') as file:
+            file.writelines(content)
+
+def write_lines(line):
+    with open("passwords.txt",'w') as file:
+        file.writelines(line)
 
 def view_file(filename = "passwords.txt"):
+    header = 'website, password\n'
     with open(filename, 'r') as file:
         content = file.readlines()
-    return content
+        if header in content:
+            content.remove(header)
+        return content
+
 
 def convert_to_int(dictionary):
     for key, value in dictionary.items():
@@ -57,3 +72,14 @@ def format_password_list(lines):
         if stripped:
             formatted += stripped + "\n"
     return formatted
+def format_to_string(lines):
+    formatted = ''.join(lines)
+    return formatted
+def format_password_list_regen_mode(lines):
+    formatted = ""
+    for line in lines:
+        stripped = line.strip()
+        if stripped:
+            formatted += stripped
+    return formatted
+
