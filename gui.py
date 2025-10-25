@@ -7,7 +7,7 @@ from functions import write_to_file
 
 # Define needed elements
 label1 = sg.Text("Type in a Website")
-label2 = sg.Text("Enter desired Number of upper case characters")
+label2 = sg.Text("Enter desired number of upper case characters")
 label3 = sg.Text("Enter desired number of lower case characters")
 label4 = sg.Text("Enter desired number of numerical characters")
 label5 = sg.Text("Enter desired number of special characters")
@@ -43,19 +43,23 @@ while True:
     event, values = window.read(timeout=100)
     match event:
         case 'Generate':
-            website = values['website']
+            try:
+                website = values['website']
 
-            values = fn.convert_to_int(values)
-            my_list = fn.convert_to_list(values)
-            password_generated = fn.create_new_password(*my_list)
-            password = fn.shuffle_str(password_generated)
-            password = "".join(password)
-            fn.write_to_file(website, password)
-            if window2_open and not window2.was_closed():
-                new_content = fn.view_file()
-                window2['passwords'].update(new_content)
+                values = fn.convert_to_int(values)
+                my_list = fn.convert_to_list(values)
+                password_generated = fn.create_new_password(*my_list)
+                password = fn.shuffle_str(password_generated)
+                password = "".join(password)
+                fn.write_to_file(website, password)
+                if window2_open and not window2.was_closed():
+                    new_content = fn.view_file()
+                    window2['passwords'].update(new_content)
 
-            generate_popup = sg.popup("Password Generated", custom_text="OK")
+                generate_popup = sg.popup("Password Generated", custom_text="Okay")
+            except ValueError:
+                sg.popup("Please type the desired number of characters into the relevant boxes",
+                         custom_text = "Okay" )
         case sg.WIN_CLOSED:
             break
         case 'Display':
@@ -82,43 +86,51 @@ while True:
             window2 = None
             window2_open = False
         elif event2 == "Regenerate":
-            password_to_edit = values2['passwords'][0]
-            print(password_to_edit)
-            pop_value = sg.popup_yes_no(f"Would you like to regenerate the password below?\n"
-                                        f"{password_to_edit}")
-            match pop_value:
-                case "Yes":
-                    user_response = list(
-                        sg.popup_get_text(f"Please enter the characters you would like in the new password"
-                                          f" in the following format\n"
-                                          f"upper,lower,numbers,special"))
-                    regen_arguments = user_response
-                    formatted_args = []
-                    for i in regen_arguments:
-                        if i == ',':
-                            pass
-                        else:
-                            formatted_args.append(int(i))
-                    regenerated_password = fn.create_new_password(*formatted_args)
-                    regenerated_password = fn.shuffle_str(regenerated_password)
-                    splits = password_to_edit.split(":")
-                    website = splits[0]
-                    formatted_password = fn.format_to_string(regenerated_password)
-                    fn.write_to_file(website, formatted_password)
-                    fn.delete_saved_password(password_to_edit)
-                    new_content = fn.view_file()
-                    window2['passwords'].update(new_content)
+            try:
+                password_to_edit = values2['passwords'][0]
+                print(password_to_edit)
+                pop_value = sg.popup_yes_no(f"Would you like to regenerate the password below?\n"
+                                            f"{password_to_edit}")
+                match pop_value:
+                    case "Yes":
+                        user_response = list(
+                            sg.popup_get_text(f"Please enter the characters you would like in the new password"
+                                              f" in the following format\n"
+                                              f"upper,lower,numbers,special"))
+                        regen_arguments = user_response
+                        formatted_args = []
+                        for i in regen_arguments:
+                            if i == ',':
+                                pass
+                            else:
+                                formatted_args.append(int(i))
+                        regenerated_password = fn.create_new_password(*formatted_args)
+                        regenerated_password = fn.shuffle_str(regenerated_password)
+                        splits = password_to_edit.split(":")
+                        website = splits[0]
+                        formatted_password = fn.format_to_string(regenerated_password)
+                        fn.write_to_file(website, formatted_password)
+                        fn.delete_saved_password(password_to_edit)
+                        new_content = fn.view_file()
+                        window2['passwords'].update(new_content)
+            except IndexError:
+                sg.popup("Cannot regenerate. Nothing is selected",
+                         custom_text="Okay")
 
         elif event2 == "Delete":
-            password_to_delete = values2['passwords'][0]
-            print(password_to_delete)
-            pop_value2 = sg.popup_yes_no(f"Would you like to delete the password below?\n"
-                                        f"{password_to_delete}")
-            match pop_value2:
-                case "Yes":
-                    fn.delete_saved_password(password_to_delete)
-                    new_content = fn.view_file()
-                    window2['passwords'].update(new_content)
+            try:
+                password_to_delete = values2['passwords'][0]
+                print(password_to_delete)
+                pop_value2 = sg.popup_yes_no(f"Would you like to delete the password below?\n"
+                                            f"{password_to_delete}")
+                match pop_value2:
+                    case "Yes":
+                        fn.delete_saved_password(password_to_delete)
+                        new_content = fn.view_file()
+                        window2['passwords'].update(new_content)
+            except IndexError:
+                sg.popup("Cannot delete. Nothing is selected",
+                         custom_text= "Okay")
 
 
 
