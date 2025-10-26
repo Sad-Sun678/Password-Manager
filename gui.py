@@ -1,4 +1,4 @@
-from os import close
+import os
 
 import functions as fn
 import FreeSimpleGUI as sg
@@ -18,16 +18,20 @@ website_edit_desc_label = sg.Text("Enter new name of the website")
 row1 = [sg.Text("Type in a Website", size=(35,1), justification='left'),
         sg.Input(key="website", expand_x=True)]
 
-row2 = [sg.Text("Enter desired number of upper case characters", size=(35,1), justification='left'),
+row2 = [sg.Text("Enter desired number of upper case characters", size=(35,1),
+                justification='left'),
         sg.Input(key="upper_case", size=(2,1))]
 
-row3 = [sg.Text("Enter desired number of lower case characters", size=(35,1), justification='left'),
+row3 = [sg.Text("Enter desired number of lower case characters", size=(35,1),
+                justification='left'),
         sg.Input(key="lower_case", size=(2,1))]
 
-row4 = [sg.Text("Enter desired number of numerical characters", size=(35,1), justification='left'),
+row4 = [sg.Text("Enter desired number of numerical characters", size=(35,1),
+                justification='left'),
         sg.Input(key="number_case", size=(2,1))]
 
-row5 = [sg.Text("Enter desired number of special characters", size=(35,1), justification='left'),
+row5 = [sg.Text("Enter desired number of special characters", size=(35,1),
+                justification='left'),
         sg.Input(key="special_case", size=(2,1))]
 
 
@@ -54,6 +58,11 @@ window = sg.Window(
 window2 = None
 window2_open = False
 while True:
+    if os.path.exists("passwords.txt"):
+        pass
+    else:
+        open("passwords.txt",'w')
+
     # polls window to receive updates
     event, values = window.read(timeout=100)
     if event == sg.WIN_CLOSED:
